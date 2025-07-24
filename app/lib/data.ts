@@ -1,5 +1,6 @@
+/** biome-ignore-all lint/suspicious/noConsole: trust in us, babe */
 import postgres from 'postgres';
-import {
+import type {
   CustomerField,
   CustomersTableType,
   InvoiceForm,
@@ -9,6 +10,7 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 
+// biome-ignore lint/style/noNonNullAssertion: trust in us, babe
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchRevenue() {
@@ -154,13 +156,13 @@ export async function fetchInvoiceById(id: string) {
       WHERE invoices.id = ${id};
     `;
 
-    const invoice = data.map((invoice) => ({
+    const invoices = data.map((invoice) => ({
       ...invoice,
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
 
-    return invoice[0];
+    return invoices[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
