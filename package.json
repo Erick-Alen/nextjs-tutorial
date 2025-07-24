@@ -23,15 +23,24 @@
     "zod": "^3.25.17"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.2",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "22.10.7",
     "@types/react": "19.0.7",
-    "@types/react-dom": "19.0.3"
+    "@types/react-dom": "19.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "ultracite": "5.0.48"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
       "bcrypt",
       "sharp"
+    ]
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,jsonc,css,scss,md,mdx}": [
+      "npx ultracite format"
     ]
   }
 }
