@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CheckIcon,
   ClockIcon,
@@ -5,13 +7,18 @@ import {
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import type { CustomerField } from '@/app/lib/definitions';
-import { Button } from '@/app/ui/button';
+import { useActionState } from 'react';
 import { createInvoice } from '@/app/lib/actions/invoices/create';
+import type { CustomerField } from '@/app/lib/definitions';
+import type { State } from '@/app/types/invoices';
+import { Button } from '@/app/ui/button';
+import { ErrorLabel } from '../error-label';
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
+  const initialState: State = { message: null, errors: {} };
+  const [state, formAction] = useActionState(createInvoice, initialState);
   return (
-    <form action={createInvoice}>
+    <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -20,6 +27,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
           </label>
           <div className="relative">
             <select
+              // aria-describedby="customer-error"
               className="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
               defaultValue=""
               id="customer"
@@ -36,6 +44,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
             </select>
             <UserCircleIcon className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-[18px] w-[18px] text-gray-500" />
           </div>
+          <ErrorLabel state={state} />
         </div>
 
         {/* Invoice Amount */}
@@ -50,12 +59,14 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 id="amount"
                 name="amount"
                 placeholder="Enter USD amount"
+                // required
                 step="0.01"
                 type="number"
               />
               <CurrencyDollarIcon className="-translate-y-1/2 pointer-events-none absolute top-1/2 left-3 h-[18px] w-[18px] text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
+          <ErrorLabel state={state} />
         </div>
 
         {/* Invoice Status */}
@@ -96,6 +107,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
                 </label>
               </div>
             </div>
+            <ErrorLabel state={state} />
           </div>
         </fieldset>
       </div>
