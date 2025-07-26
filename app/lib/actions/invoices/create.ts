@@ -7,8 +7,6 @@ import { FormSchema, type State } from '@/app/types/invoices';
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
-// biome-ignore lint/style/noNonNullAssertion: <explanation>
-
 export async function createInvoice(_prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = CreateInvoice.safeParse({
